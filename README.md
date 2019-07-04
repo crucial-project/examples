@@ -1,4 +1,4 @@
-# CRUCIAL Exmaples
+# CRUCIAL Examples
 
 This repository contains different examples using the
 [CRUCIAL](http://github.com/danielBCN/crucial) system.
