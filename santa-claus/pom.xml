@@ -46,7 +46,7 @@
 
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-crucial-client</artifactId>
+            <artifactId>crucial-dso-client</artifactId>
             <version>9.0.3.Final</version>
         </dependency>
     </dependencies>
@@ -61,7 +61,7 @@
                     <aspectLibraries>
                         <aspectLibrary>
                             <groupId>org.infinispan</groupId>
-                            <artifactId>infinispan-crucial-core</artifactId>
+                            <artifactId>crucial-dso-core</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
                     <complianceLevel>1.8</complianceLevel>

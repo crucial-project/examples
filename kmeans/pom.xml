@@ -45,7 +45,7 @@
 
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-crucial-client</artifactId>
+            <artifactId>crucial-dso-client</artifactId>
             <version>9.0.3.Final</version>
         </dependency>
 
@@ -66,7 +66,7 @@
                     <aspectLibraries>
                         <aspectLibrary>
                             <groupId>org.infinispan</groupId>
-                            <artifactId>infinispan-crucial-core</artifactId>
+                            <artifactId>crucial-dso-core</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
                     <complianceLevel>1.8</complianceLevel>
@@ -103,13 +103,14 @@
             <plugin>
                 <groupId>com.github.seanroy</groupId>
                 <artifactId>lambda-maven-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.3.3</version>
                 <configuration>
                     <region>${lambda.region}</region>
                     <functionCode>${lambda.functionCode}</functionCode>
                     <version>${lambda.version}</version>
                     <lambdaRoleArn>${lambda.roleArn}</lambdaRoleArn>
                     <s3Bucket>${lambda.s3Bucket}</s3Bucket>
+                    <keyPrefix>crucial-jars</keyPrefix>
                     <publish>${lambda.publish}</publish>
                     <forceUpdate>${lambda.forceUpdate}</forceUpdate>
                     <vpcSecurityGroupIds>
