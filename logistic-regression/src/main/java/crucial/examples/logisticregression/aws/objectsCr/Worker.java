@@ -1,7 +1,5 @@
 package crucial.examples.logisticregression.aws.objectsCr;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.infinispan.crucial.CCyclicBarrier;
 import org.infinispan.crucial.Shared;
 
@@ -133,23 +131,12 @@ public class Worker implements Runnable {
     
     
 
-    private void loadDataset() {
-        //List<List<Double>> loadedSamples = new ArrayList<>();
-        //List<Double> loadedLabels = new ArrayList<>();
-        
+    private void loadDataset() {   
         samples = new double[DATASET_FRAGMENT_SIZE][];
         labels = new double[DATASET_FRAGMENT_SIZE];
         
         S3Reader s3Reader = new S3Reader();
         s3Reader.loadData(workerId, filePrefix, samples, labels);
-        
-        
-        /* 
-        for (int i=0;i<loadedSamples.size();i++) {
-            samples[i] = loadedSamples.get(i).stream().mapToDouble(Double::doubleValue).toArray();
-        }
-        labels = loadedLabels.stream().mapToDouble(Double::doubleValue).toArray();
-        */
     }
     
     private static double dot(double[] data, double[] weights, double intercept) {
@@ -167,10 +154,6 @@ public class Worker implements Runnable {
         double z = dot(sample, weights, intercept);
         return 1.0 / (1.0 + Math.exp(-z));
     }
-    
-    /*private static double sigmoid(double z) {
-        return 1.0 / (1.0 + Math.exp(-z));
-    }*/
     
     private double log1pExp(double x) {
         double ret;

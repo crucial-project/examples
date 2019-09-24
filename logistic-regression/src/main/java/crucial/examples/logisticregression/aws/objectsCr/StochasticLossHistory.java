@@ -50,8 +50,6 @@ public class StochasticLossHistory {
     
     public void updateRegVal(double norm, double regParam) {
         regVal = 0.5 * regParam * norm * norm;
-        
-        //System.out.println("regVal is " + regVal);
     }
     
 }
