@@ -128,7 +128,7 @@
                     <lambdaFunctionsJSON>
                         [
                         {
-                        "functionName": ${lambda.functionName},
+                        "functionName": "${lambda.functionName}",
                         "description": "CloudThread Handler",
                         "handler": "crucial.execution.aws.LambdaHandler",
                         "timeout": ${lambda.timeout},
