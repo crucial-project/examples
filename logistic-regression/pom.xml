@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>crucial.examples</groupId>
+    <artifactId>logistic-regression</artifactId>
+    <version>1.0</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!--AWS CONFIG PROPERTIES-->
+        <lambda.awsAccountId>000000000000</lambda.awsAccountId>
+        <lambda.roleName>role-name</lambda.roleName>
+        <lambda.functionName>CloudTread</lambda.functionName>
+        <lambda.timeout>60</lambda.timeout>
+        <lambda.memorySize>1024</lambda.memorySize>
+        <lambda.functionNameSuffix>-example</lambda.functionNameSuffix>
+        <lambda.s3Bucket>yourBucket</lambda.s3Bucket>
+        <lambda.region>us-east-1</lambda.region>
+        <!-- RUNNING IN A VPC-->
+        <lambda.vpcsecurityGroup>sg-000222aaafff000aa</lambda.vpcsecurityGroup>
+        <!-- CHANGE SUBNETS BELOW: LAMBDA PLUGIN -->
+
+        <lambda.roleArn>
+            arn:aws:iam::${lambda.awsAccountId}:role/${lambda.roleName}
+        </lambda.roleArn>
+        <lambda.functionCode>
+            ${project.build.directory}/${project.build.finalName}.jar
+        </lambda.functionCode>
+        <lambda.version>${project.version}</lambda.version>
+        <lambda.publish>true</lambda.publish>
+        <lambda.forceUpdate>true</lambda.forceUpdate>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>crucial</groupId>
+            <artifactId>aws-executor</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>crucial-dso-client</artifactId>
+            <version>9.0.3.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.492</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.11</version>
+                <configuration>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>org.infinispan</groupId>
+                            <artifactId>crucial-dso-core</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                    <complianceLevel>1.8</complianceLevel>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile
+                            </goal>       <!-- use this goal to weave all your main classes -->
+                            <goal>test-compile
+                            </goal>  <!-- use this goal to weave all your test classes -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <createDependencyReducedPom>false
+                    </createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.seanroy</groupId>
+                <artifactId>lambda-maven-plugin</artifactId>
+                <version>2.3.3</version>
+                <configuration>
+                    <region>${lambda.region}</region>
+                    <functionCode>${lambda.functionCode}</functionCode>
+                    <version>${lambda.version}</version>
+                    <lambdaRoleArn>${lambda.roleArn}</lambdaRoleArn>
+                    <s3Bucket>${lambda.s3Bucket}</s3Bucket>
+                    <keyPrefix>crucial-jars</keyPrefix>
+                    <publish>${lambda.publish}</publish>
+                    <forceUpdate>${lambda.forceUpdate}</forceUpdate>
+                    <vpcSecurityGroupIds>
+                        <vpcSecurityGroupId>${lambda.vpcsecurityGroup}
+                        </vpcSecurityGroupId>
+                    </vpcSecurityGroupIds>
+                    <vpcSubnetIds>  <!-- CHANGE SUBNETS HERE -->
+                        <vpcSubnetId>subnet-000222aaafff000aa</vpcSubnetId>
+                        <vpcSubnetId>subnet-000222aaafff000aa</vpcSubnetId>
+                        <vpcSubnetId>subnet-000222aaafff000aa</vpcSubnetId>
+                        <vpcSubnetId>subnet-000222aaafff000aa</vpcSubnetId>
+                    </vpcSubnetIds>
+                    <functionNameSuffix>${lambda.functionNameSuffix}
+                    </functionNameSuffix>
+                    <lambdaFunctionsJSON>
+                        [
+                        {
+                        "functionName": ${lambda.functionName},
+                        "description": "CloudThread Handler",
+                        "handler": "crucial.execution.aws.LambdaHandler",
+                        "timeout": ${lambda.timeout},
+                        "memorySize": ${lambda.memorySize}
+                        }
+                        ]
+                    </lambdaFunctionsJSON>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
