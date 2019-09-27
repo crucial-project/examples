@@ -10,7 +10,7 @@ To build this example you will need the Crucial DSO client installed to the loca
 Follow the instructions to [install and run Crucial DSO](https://github.com/danielBCN/crucial-dso)
 
 You will need also to set up some extra configurations in AWS:
-* This example is configured to run in a Virtual Private Cloud (VPC). You need to create a VPC with several subnets (e.g. 10.0.128.0/24, 10.0.129.0/24, ...). For more information on configuring a Lambda function to access resources in a VPC, check out (https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html)[AWS Developer Guide].
+* This example is configured to run in a Virtual Private Cloud (VPC). You need to create a VPC with several subnets (e.g. 10.0.128.0/24, 10.0.129.0/24, ...). For more information on configuring a Lambda function to access resources in a VPC, check out [AWS Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html).
 * Assign an S3 endpoint to the route table of the VPC, to allow lambda functions to access S3.
 * Create an IAM role with at least the following policies: AWSLambdaFullAccess, AmazonS3FullAccess, CloudWatchLogsFullAccess, and AWSLambdaVPCAccessExecutionRole.
 
