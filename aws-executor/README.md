@@ -13,3 +13,6 @@ Thread t = new CloudThread(new MyRunnable());
 t.start();
 t.join();
 ```
+
+You can simulate the execution with a local thread with `t.setLocal(true);`
+before starting the `CloudThread`.
