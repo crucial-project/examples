@@ -29,6 +29,12 @@ public class ServerlessExecutorServiceTest {
 
         assert future.get().equals(ret);
 
+
+        Future<?> futureR = es.submit((Serializable & Runnable) () -> {
+            System.out.println("I am run.");
+        });
+
+        assert futureR.get() == null;
     }
 
     @Test

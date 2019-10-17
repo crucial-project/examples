@@ -3,20 +3,18 @@ package crucial.execution;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class ServerlessExecutorService implements ExecutorService {
 
     private final String executorName = UUID.randomUUID().toString();
     protected boolean logs = true;
     private ExecutorService executorService;
-    private AtomicInteger invocationCounter;
     private boolean local = false;
     private boolean isShutdown = false;
+    private List<Future<?>> submittedTasks = new LinkedList<>();
 
     public ServerlessExecutorService() {
         executorService = Executors.newFixedThreadPool(1000);
-        invocationCounter = new AtomicInteger();
     }
 
     protected String printExecutorPrefix() {
@@ -51,20 +49,48 @@ public abstract class ServerlessExecutorService implements ExecutorService {
 
     public boolean awaitTermination(long timeout, TimeUnit unit)
             throws InterruptedException {
-        return false;
+        long tInit = System.currentTimeMillis();
+        long tEnd = tInit + TimeUnit.MILLISECONDS.convert(timeout, unit);
+        for (Future<?> future : submittedTasks) {
+            try {
+                if (!future.isDone())
+                    future.get(tEnd - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                return false;
+            } catch (TimeoutException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public <T> Future<T> submit(Callable<T> task) {
-        try {
-            return invokeAll(Collections.singleton(task)).get(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        Callable<T> localCallable = () -> {
+            ThreadCall call = new ThreadCall("ServerlessExecutor-"
+                    + Thread.currentThread().getName());
+            call.setTarget(task);
+            return invoke(call);
+        };
+        Future<T> f = executorService.submit(localCallable);
+        submittedTasks.add(f);
+        return f;
     }
 
     public <T> Future<T> submit(Runnable task, T result) {
-        return null;
+        Runnable localRunnable = () -> {
+            ThreadCall call = new ThreadCall("ServerlessExecutor-"
+                    + Thread.currentThread().getName());
+            call.setTarget(task);
+            try {
+                invoke(call);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        };
+        Future<T> f = executorService.submit(localRunnable, result);
+        submittedTasks.add(f);
+        return f;
     }
 
     public Future<?> submit(Runnable task) {
@@ -75,8 +101,6 @@ public abstract class ServerlessExecutorService implements ExecutorService {
         List<Callable<T>> localCallables = Collections.synchronizedList(new ArrayList<>());
         tasks.parallelStream().forEach(task -> {
             localCallables.add(() -> {
-                System.out.println("Invoking #" + invocationCounter.incrementAndGet()
-                        + ": " + task);
                 ThreadCall threadCall = new ThreadCall("ServerlessExecutor-"
                         + Thread.currentThread().getName());
                 threadCall.setTarget(task);

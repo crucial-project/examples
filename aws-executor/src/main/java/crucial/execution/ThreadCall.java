@@ -29,6 +29,7 @@ class ThreadCall implements Serializable {
     /**
      * Will be a Runnable or a Callable.
      * Runnables are Callables that return null.
+     *
      * @return A Callable.
      */
     Callable getTarget() {
@@ -37,13 +38,21 @@ class ThreadCall implements Serializable {
 
     /**
      * Must be a Runnable or a Callable
+     *
      * @param target Runnable or callable.
      */
     void setTarget(Callable target) {
+        if (target == null)
+            throw new NullPointerException();
         this.target = target;
     }
 
     void setTarget(Runnable target) {
-        this.target = Executors.callable(target);
+        if (target == null)
+            throw new NullPointerException();
+        this.target = (Serializable & Callable) ()->{
+            target.run();
+            return null;
+        };
     }
 }
