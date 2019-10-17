@@ -1,4 +1,4 @@
-package crucial.execution.aws;
+package crucial.withkeep.aws;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.model.InvokeResult;
@@ -19,11 +19,12 @@ import java.util.stream.Stream;
  *
  * @author Daniel
  */
+@Deprecated
 public class CloudThread extends Thread {
     // === === === === === === === === === ===
     //             CONFIGURE THIS
-    private static Regions region = Regions.US_EAST_1;
-    private static String functionName = "CloudThread-example";
+    static final Regions region = Regions.US_EAST_1;
+    static final String functionName = "CloudThread-example";
     // === === === === === === === === === ===
     static final int maxTries = 1;
     static final String targetClassNameKey = "targetClassName";

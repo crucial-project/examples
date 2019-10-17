@@ -1,11 +1,12 @@
 package crucial.examples.logisticregression.aws.objectsCr;
 
 import java.util.ArrayList;
+
+import crucial.execution.aws.AWSLambdaThread;
 import org.infinispan.crucial.CCyclicBarrier;
 import org.infinispan.crucial.CrucialClient;
 import org.infinispan.crucial.Shared;
 
-import crucial.execution.aws.CloudThread;
 
 public class Main {
     static CrucialClient cc = CrucialClient.getClient("crucialIP:11222");
@@ -57,7 +58,7 @@ public class Main {
 
         long initTime = System.currentTimeMillis();
         for (int w = 0; w < parallelism; w++) {
-            threads.add(new CloudThread(new Worker(w, numberOfIterations, parallelism, numFeatures, filePrefix)));
+            threads.add(new AWSLambdaThread(new Worker(w, numberOfIterations, parallelism, numFeatures, filePrefix)));
         }
 
         for (Thread t : threads)

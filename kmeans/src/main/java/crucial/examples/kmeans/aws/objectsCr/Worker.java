@@ -1,6 +1,5 @@
 package crucial.examples.kmeans.aws.objectsCr;
 
-import crucial.execution.aws.Keep;
 import org.infinispan.crucial.CCyclicBarrier;
 import org.infinispan.crucial.Shared;
 
@@ -10,21 +9,13 @@ import java.util.List;
 public class Worker implements Runnable {
     private static final double THRESHOLD = 0.00001;
 
-    @Keep
     private int workerId;
-    @Keep
     private int numDimensions;
-    @Keep
     private int numClusters;
-    @Keep
     private int maxIterations;
-    @Keep
     private int partitionPoints;
-    @Keep
     private int parallelism;
-    @Keep
     private int startPartition;
-    @Keep
     private int endPartition;
 
     private double[][] localPartition, localCentroids, correctCentroids;

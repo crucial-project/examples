@@ -1,6 +1,6 @@
 package crucial.examples.kmeans.aws.objectsCr;
 
-import crucial.execution.aws.CloudThread;
+import crucial.execution.aws.AWSLambdaThread;
 import org.infinispan.crucial.CCyclicBarrier;
 import org.infinispan.crucial.CrucialClient;
 import org.infinispan.crucial.Shared;
@@ -79,7 +79,7 @@ public class Main {
 
         long initTime = System.currentTimeMillis();
         for (int w = 0; w < parallelism; w++) {
-            threads.add(new CloudThread(new Worker(w, numberOfDataPoints, numberOfDimensions, parallelism,
+            threads.add(new AWSLambdaThread(new Worker(w, numberOfDataPoints, numberOfDimensions, parallelism,
                     numberOfClusters, numberOfIterations)));
         }
 

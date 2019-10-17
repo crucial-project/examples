@@ -130,7 +130,7 @@
                         {
                         "functionName": "${lambda.functionName}",
                         "description": "CloudThread Handler",
-                        "handler": "crucial.execution.aws.LambdaHandler",
+                        "handler": "crucial.withkeep.aws.LambdaHandler",
                         "timeout": ${lambda.timeout},
                         "memorySize": ${lambda.memorySize}
                         }

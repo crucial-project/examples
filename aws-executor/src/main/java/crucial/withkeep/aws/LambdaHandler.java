@@ -1,4 +1,4 @@
-package crucial.execution.aws;
+package crucial.withkeep.aws;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -46,6 +46,10 @@ public class LambdaHandler implements RequestHandler<HashMap<String, String>, Ob
             }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
+            /* If there is an exception in the user code, it escalates to AWS Lambda,
+                returning to the caller. The CLoudThread logic at client side may
+                perform retries.
+             */
         }
         return null;
     }

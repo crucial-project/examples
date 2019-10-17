@@ -1,7 +1,7 @@
 package crucial.examples.santa.aws.objectsCr;
 
 
-import crucial.execution.aws.Keep;
+import crucial.withkeep.aws.Keep;
 import org.infinispan.crucial.CAtomicBoolean;
 import org.infinispan.crucial.Shared;
 

@@ -1,4 +1,4 @@
-package crucial.execution.aws;
+package crucial.withkeep.aws;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.regions.Regions;
@@ -22,7 +22,7 @@ public class LambdaInvoker {
         lambdaClient = AWSLambdaClientBuilder.standard()
                 .withRegion(region)
                 .withClientConfiguration(new ClientConfiguration()
-                        .withMaxConnections(400).withSocketTimeout(600_000))
+                        .withMaxConnections(1000).withSocketTimeout(600_000))
                 .build();
         lambdaFunctionName = functionName;
     }

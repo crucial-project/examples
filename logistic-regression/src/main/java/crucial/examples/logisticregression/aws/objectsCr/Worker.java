@@ -3,7 +3,7 @@ package crucial.examples.logisticregression.aws.objectsCr;
 import org.infinispan.crucial.CCyclicBarrier;
 import org.infinispan.crucial.Shared;
 
-import crucial.execution.aws.Keep;
+import crucial.withkeep.aws.Keep;
 
 public class Worker implements Runnable {
     

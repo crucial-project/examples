@@ -1,6 +1,7 @@
 package crucial.examples.santa.aws.objectsCr;
 
-import crucial.execution.aws.CloudThread;
+import crucial.execution.CloudThread;
+import crucial.execution.aws.AWSLambdaThread;
 import org.infinispan.crucial.CAtomicBoolean;
 import org.infinispan.crucial.CAtomicInt;
 import org.infinispan.crucial.CLogger;
@@ -46,11 +47,11 @@ public class SantaClaus implements Runnable{
         sc.reinsGroup.setUp("reinsGroup", NUMBER_OF_REINDEER);
 
         ArrayList<Thread> threads = new ArrayList<>();
-        threads.add(new CloudThread(sc));
+        threads.add(new AWSLambdaThread(sc));
         for (int i = 0; i < NUMBER_OF_ELVES; ++ i)
-            threads.add(new CloudThread(new Elf(i)));
+            threads.add(new AWSLambdaThread(new Elf(i)));
         for (int i = 0; i < NUMBER_OF_REINDEER; ++ i)
-            threads.add(new CloudThread(new Reindeer(i)));
+            threads.add(new AWSLambdaThread(new Reindeer(i)));
 
 //        for (Thread t : threads)
 //            ((CloudThread)t).setLocal(true);
@@ -65,7 +66,7 @@ public class SantaClaus implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        CloudThread.stopInvoker();
+        AWSLambdaThread.closeInvoker();
         log.print("Santa dies of boredom.");
     }
 
