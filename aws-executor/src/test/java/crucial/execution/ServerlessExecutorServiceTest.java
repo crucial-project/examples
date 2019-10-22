@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +36,22 @@ public class ServerlessExecutorServiceTest {
         });
 
         assert futureR.get() == null;
+
+        List<Future<String>> futs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            futs.add(es.submit((Serializable & Callable<String>) () -> {
+                System.out.println("I am run. " + finalI);
+                return ret;
+            }));
+        }
+        futs.forEach(stringFuture -> {
+            try {
+                stringFuture.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Test
@@ -52,6 +69,32 @@ public class ServerlessExecutorServiceTest {
         List<Future<String>> futures = es.invokeAll(myTasks);
         for (Future<String> future : futures) {
             assert future.get().equals(ret);
+        }
+    }
+
+    @Test
+    public void testInvokeIterativeTask() {
+        ServerlessExecutorService es = new AWSLambdaExecutorService();
+        es.setLocal(true);
+
+//        for (int i = 0; i < 10; i++) {
+//            System.out.println("HI " + i);
+//        }
+        System.out.println("EXECUTOR:");
+        try {
+            es.invokeIterativeTask((IterativeRunnable) index -> System.out.println("HI " + index),
+                    2, 0, 10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("With finalize:");
+        try {
+            es.invokeIterativeTask(
+                    (IterativeRunnable) index -> System.out.println("HI " + index),
+                    2, 0, 10,
+                    (Serializable & Runnable) () -> System.out.println("I'm finished"));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

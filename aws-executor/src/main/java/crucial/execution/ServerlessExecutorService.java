@@ -1,6 +1,7 @@
 package crucial.execution;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -66,6 +67,9 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     }
 
     public <T> Future<T> submit(Callable<T> task) {
+        if (task == null) throw new NullPointerException();
+        if (!(task instanceof Serializable))
+            throw new IllegalArgumentException("Tasks must be Serializable");
         Callable<T> localCallable = () -> {
             ThreadCall call = new ThreadCall("ServerlessExecutor-"
                     + Thread.currentThread().getName());
@@ -78,16 +82,7 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     }
 
     public <T> Future<T> submit(Runnable task, T result) {
-        Runnable localRunnable = () -> {
-            ThreadCall call = new ThreadCall("ServerlessExecutor-"
-                    + Thread.currentThread().getName());
-            call.setTarget(task);
-            try {
-                invoke(call);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        };
+        Runnable localRunnable = generateRunnable(task);
         Future<T> f = executorService.submit(localRunnable, result);
         submittedTasks.add(f);
         return f;
@@ -100,6 +95,9 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     private <T> List<Callable<T>> generateCallables(Collection<? extends Callable<T>> tasks) {
         List<Callable<T>> localCallables = Collections.synchronizedList(new ArrayList<>());
         tasks.parallelStream().forEach(task -> {
+            if (task == null) throw new NullPointerException();
+            if (!(task instanceof Serializable))
+                throw new IllegalArgumentException("Tasks must be Serializable");
             localCallables.add(() -> {
                 ThreadCall threadCall = new ThreadCall("ServerlessExecutor-"
                         + Thread.currentThread().getName());
@@ -137,8 +135,73 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     }
 
     public void execute(Runnable command) {
-
+        Runnable localRunnable = generateRunnable(command);
+        executorService.execute(localRunnable);
     }
+
+    private Runnable generateRunnable(Runnable command) {
+        if (command == null) throw new NullPointerException();
+        if (!(command instanceof Serializable))
+            throw new IllegalArgumentException("Tasks must be Serializable");
+        return () -> {
+            ThreadCall call = new ThreadCall("ServerlessExecutor-"
+                    + Thread.currentThread().getName());
+            call.setTarget(command);
+            try {
+                invoke(call);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        };
+    }
+
+
+    // *** *** *** NEW METHODS *** *** ***
+
+    public void invokeIterativeTask(IterativeRunnable task, int nWorkers,
+                                    long fromInclusive, long toExclusive)
+            throws InterruptedException {
+        if (task == null) throw new NullPointerException();
+        // IterativeRunnable is Serializable
+        List<Callable<Void>> tasks = new ArrayList<>();
+        for (int workerID = 0; workerID < nWorkers; workerID++) {
+            tasks.add(new IterativeCallable(fromInclusive, toExclusive,
+                    workerID, nWorkers, task, null));
+        }
+        invokeAll(tasks);
+    }
+
+    /**
+     * @param task          Task should be an {@link IterativeRunnable}. It can be
+     *                      defined with a normal class, a static inner class, or a
+     *                      lambda expression; but not an inner class. Inner classes
+     *                      depend on the enclosing instance, which might lead to
+     *                      serialization problems.
+     * @param nWorkers      Number of workers among which split the iterations.
+     * @param fromInclusive Start of the iteration index.
+     * @param toExclusive   End of the iteration index.
+     * @param finalizer     Runnable to execute by each worker upon completion of
+     *                      all iterations.
+     * @throws InterruptedException Error awaiting local threads.
+     */
+    public void invokeIterativeTask(IterativeRunnable task, int nWorkers,
+                                    long fromInclusive, long toExclusive,
+                                    Runnable finalizer)
+            throws InterruptedException {
+        if (task == null) throw new NullPointerException();
+        // IterativeRunnable is Serializable
+        if (finalizer != null && !(finalizer instanceof Serializable))
+            throw new IllegalArgumentException("The finalizer must be Serializable");
+        List<Callable<Void>> tasks = new ArrayList<>();
+        for (int workerID = 0; workerID < nWorkers; workerID++) {
+            tasks.add(new IterativeCallable(fromInclusive, toExclusive,
+                    workerID, nWorkers, task, finalizer));
+        }
+        invokeAll(tasks);
+    }
+
+
+    // *** *** *** HELPER METHODS *** *** ***
 
     private <T> T invoke(ThreadCall threadCall) throws IOException, ClassNotFoundException {
         byte[] tC = ByteMarshaller.toBytes(threadCall);
@@ -164,4 +227,43 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     }
 
     public abstract void closeInvoker();
+
+    /**
+     * This is a static class and not an in-line lambda expression because it
+     * needs to be serialized. If it were an in-line definition, it would be
+     * serialized along its enclosing instance, which is the entire
+     * ExecutorService. And we do not want that.
+     */
+    static class IterativeCallable implements Serializable, Callable<Void> {
+        long fromInclusive, toExclusive;
+        int myID, nWorkers;
+        IterativeRunnable task;
+        Runnable finalizer;
+
+        IterativeCallable(long fromInclusive, long toExclusive,
+                          int myID, int nWorkers,
+                          IterativeRunnable task,
+                          Runnable finalizer) {
+            this.fromInclusive = fromInclusive;
+            this.toExclusive = toExclusive;
+            this.myID = myID;
+            this.nWorkers = nWorkers;
+            this.task = task;
+            this.finalizer = finalizer;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            long size = toExclusive - fromInclusive;
+            long range = size / nWorkers;
+            // Static partitioning: assigning ranges
+            long start = myID * range + fromInclusive;
+            long end = (myID == nWorkers - 1) ? toExclusive : start + range;
+            for (long l = start; l < end; l++) {
+                task.run(l);
+            }
+            if (finalizer != null) finalizer.run();
+            return null;
+        }
+    }
 }
