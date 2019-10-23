@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
  *
  * @author Daniel
  */
-public class AWSLambdaInvoker {
+class AWSLambdaInvoker {
     private static AWSLambda lambdaClient;
     private String lambdaFunctionName;
     private Gson gson = new Gson();

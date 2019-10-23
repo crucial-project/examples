@@ -161,8 +161,8 @@ public class Worker implements Runnable {
     
     private double norm(double[] weights, double intercept) {
         double ret = 0.0;
-        for (int i = 0; i < weights.length; i++) {
-            ret += weights[i] * weights[i];
+        for (double weight : weights) {
+            ret += weight * weight;
         }
         if (USE_INTERCEPT) {
             ret += intercept * intercept;

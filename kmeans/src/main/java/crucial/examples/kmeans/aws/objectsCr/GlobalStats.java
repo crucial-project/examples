@@ -31,7 +31,8 @@ public class GlobalStats {
         double min = Arrays.stream(iterationTimes).min().getAsDouble();
         double average = Arrays.stream(iterationTimes).average().getAsDouble();
         double max = Arrays.stream(iterationTimes).max().getAsDouble();
-        strBuilder.append("Min/Avg/Max: " + min + " / " + average + " / " + max + "\n");
+        strBuilder.append("Min/Avg/Max: ").append(min).append(" / ")
+                .append(average).append(" / ").append(max).append("\n");
 
         return strBuilder.toString();
     }

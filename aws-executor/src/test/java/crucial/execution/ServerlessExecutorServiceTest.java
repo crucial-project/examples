@@ -1,7 +1,6 @@
 package crucial.execution;
 
 import crucial.execution.aws.AWSLambdaExecutorService;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -13,8 +12,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
-
-import static org.testng.Assert.*;
 
 public class ServerlessExecutorServiceTest {
     @Test
@@ -32,9 +29,7 @@ public class ServerlessExecutorServiceTest {
         assert future.get().equals(ret);
 
 
-        Future<?> futureR = es.submit((Serializable & Runnable) () -> {
-            System.out.println("I am run.");
-        });
+        Future<?> futureR = es.submit((Serializable & Runnable) () -> System.out.println("I am run."));
 
         assert futureR.get() == null;
 
@@ -78,9 +73,6 @@ public class ServerlessExecutorServiceTest {
         ServerlessExecutorService es = new AWSLambdaExecutorService();
         es.setLocal(true);
 
-//        for (int i = 0; i < 10; i++) {
-//            System.out.println("HI " + i);
-//        }
         System.out.println("EXECUTOR:");
         try {
             es.invokeIterativeTask((IterativeRunnable) index -> System.out.println("HI " + index),

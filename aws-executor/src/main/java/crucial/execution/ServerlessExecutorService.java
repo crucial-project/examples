@@ -105,7 +105,7 @@ public abstract class ServerlessExecutorService implements ExecutorService {
                 threadCall.setTarget(task);
                 try {
                     return invoke(threadCall);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -180,13 +180,14 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     /**
      * @param task          Task should be an {@link IterativeRunnable}. It can be
      *                      defined with a normal class, a static inner class, or a
-     *                      lambda expression; but not an inner class. Inner classes
+     *                      lambda expression (if it does not access a class instance
+     *                      field); but not an inner class. Inner classes
      *                      depend on the enclosing instance, which might lead to
      *                      serialization problems.
      * @param nWorkers      Number of workers among which split the iterations.
      * @param fromInclusive Start of the iteration index.
      * @param toExclusive   End of the iteration index.
-     * @param finalizer     Runnable to execute by each crucial.examples.mandelbrot.worker upon completion of
+     * @param finalizer     Runnable to execute by each worker upon completion of
      *                      all iterations.
      * @throws InterruptedException Error awaiting local threads.
      */
@@ -198,6 +199,8 @@ public abstract class ServerlessExecutorService implements ExecutorService {
         // IterativeRunnable is Serializable
         if (finalizer != null && !(finalizer instanceof Serializable))
             throw new IllegalArgumentException("The finalizer must be Serializable");
+        if (toExclusive - fromInclusive <= 0)
+            throw new IllegalArgumentException("Illegal from-to combination.");
         List<Callable<Void>> tasks = new ArrayList<>();
         for (int workerID = 0; workerID < nWorkers; workerID++) {
             tasks.add(new IterativeCallable(fromInclusive, toExclusive,

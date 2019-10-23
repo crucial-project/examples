@@ -92,7 +92,7 @@ public class Worker implements Runnable {
 
                 str.append(" [");
                 for (int j = 0; j < samplePoints[k].length; j++) {
-                    str.append(samplePoints[k][j] + ",");
+                    str.append(samplePoints[k][j]).append(",");
                 }
                 str.append("]\n");
             }

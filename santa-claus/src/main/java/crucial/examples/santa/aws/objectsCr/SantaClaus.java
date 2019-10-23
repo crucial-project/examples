@@ -1,6 +1,5 @@
 package crucial.examples.santa.aws.objectsCr;
 
-import crucial.execution.CloudThread;
 import crucial.execution.aws.AWSLambdaThread;
 import org.infinispan.crucial.CAtomicBoolean;
 import org.infinispan.crucial.CAtomicInt;
