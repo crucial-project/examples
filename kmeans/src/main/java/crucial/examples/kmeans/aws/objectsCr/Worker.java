@@ -22,7 +22,7 @@ public class Worker implements Runnable {
     private int[] localSizes, localMembership;
 
 
-    // Shared objects
+    // Shared crucial.examples.mandelbrot.objects
     @Shared(key = "delta")
     private GlobalDelta globalDelta = new GlobalDelta();
     @Shared(key = "stats")
@@ -67,9 +67,9 @@ public class Worker implements Runnable {
         int iterCount = 0;
         double globalDeltaVal;
         do {
-            System.out.println("Iteration " + iterCount + " of worker " + workerId);
+            System.out.println("Iteration " + iterCount + " of crucial.examples.mandelbrot.worker " + workerId);
 
-            // Get local copy of global objects
+            // Get local copy of global crucial.examples.mandelbrot.objects
             correctCentroids = globalCentroids.getCorrectCoordinates();
 
             breakdown.add(System.currentTimeMillis());
@@ -83,7 +83,7 @@ public class Worker implements Runnable {
 
             breakdown.add(System.currentTimeMillis());
 
-            // Update global objects
+            // Update global crucial.examples.mandelbrot.objects
             globalDelta.update(delta, localPartition.length);
 
             // Update global centroids
@@ -96,7 +96,7 @@ public class Worker implements Runnable {
 
             breakdown.add(System.currentTimeMillis());
             globalDeltaVal = globalDelta.getGlobalDelta();
-            System.out.println("DEBUG: Finished Iteration " + iterCount + " of worker " + workerId + " [GlobalDelta=" + globalDeltaVal + "]");
+            System.out.println("DEBUG: Finished Iteration " + iterCount + " of crucial.examples.mandelbrot.worker " + workerId + " [GlobalDelta=" + globalDeltaVal + "]");
             iterCount++;
         } while (iterCount < maxIterations && globalDeltaVal > THRESHOLD);
         long endTime = System.currentTimeMillis();

@@ -8,8 +8,8 @@ stages of the implementation.
 
 `threads` package contains implementations of the problem with plain
 Java threads.
-`objects` is fully local. Threads share memory.
-`objectsCr` is the same, but shared objects are decoupled in CRUCIAL.
+`crucial.examples.mandelbrot.objects` is fully local. Threads share memory.
+`objectsCr` is the same, but shared crucial.examples.mandelbrot.objects are decoupled in CRUCIAL.
 
 `aws` package contains the same implementation with `objectsCr` but the
 threads now run in AWS Lambda by using the `CloudThread` abstraction in
@@ -79,7 +79,7 @@ mvn package shade:shade lambda:deploy-lambda -DskipTests -f pom.xml
 ### Run
 
 You have to copy `santa-claus-1.0.jar` to the client node. 
-Since this example contains user-defined shared objects, you also have to copy
+Since this example contains user-defined shared crucial.examples.mandelbrot.objects, you also have to copy
 this jar file to the `/tmp` directory of the Crucial DSO server node/s, so that
 it can be imported.
 
@@ -90,7 +90,7 @@ Start the Crucial DSO server with VPC support:
 ```
 
 Make sure that the Crucial DSO server is loading the jar file with the shared
-objects classes. The logs should show a line like this:
+crucial.examples.mandelbrot.objects classes. The logs should show a line like this:
 
 ```
 [Server] Loading santa-claus-1.0.jar

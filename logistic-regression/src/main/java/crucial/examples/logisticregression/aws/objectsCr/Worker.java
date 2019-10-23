@@ -3,7 +3,6 @@ package crucial.examples.logisticregression.aws.objectsCr;
 import org.infinispan.crucial.CCyclicBarrier;
 import org.infinispan.crucial.Shared;
 
-import crucial.withkeep.aws.Keep;
 
 public class Worker implements Runnable {
     
@@ -11,16 +10,11 @@ public class Worker implements Runnable {
     private static final double REG_PARAM = 0.0; //0.01;
     public static final boolean USE_INTERCEPT = false;
     private static final int DATASET_FRAGMENT_SIZE = 695866;
-    
-    @Keep
+
     private int workerId;
-    @Keep
     private int maxIterations;
-    @Keep
     private int parallelism;
-    @Keep
     private int numFeatures;
-    @Keep
     private String filePrefix;
     
     private CCyclicBarrier barrier = Main.cc.getCyclicBarrier("barrier");
@@ -104,7 +98,7 @@ public class Worker implements Runnable {
                 }
                 miniBatchSize++;
             }
-            //System.out.println("END ITER worker " + workerId + " iteration: " + i);
+            //System.out.println("END ITER crucial.examples.mandelbrot.worker " + workerId + " iteration: " + i);
             globalWeights.merge(cumGradient, cumLoss, miniBatchSize, LEARNING_RATE, REG_PARAM, i+1);
             
             barrier.await();
@@ -116,7 +110,7 @@ public class Worker implements Runnable {
             localIntercept = globalWeights.getIntercept();
             
             if (workerId == 0) {
-                // worker in charge of updating regVal
+                // crucial.examples.mandelbrot.worker in charge of updating regVal
                 double norm = norm(localWeights, localIntercept);
                 globalWeights.updateRegVal(norm, REG_PARAM);
             }

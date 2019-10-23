@@ -15,6 +15,7 @@ public class CloudThreadHandler {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
             result = e;
         }
         try {

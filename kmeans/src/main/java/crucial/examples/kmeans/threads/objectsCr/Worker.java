@@ -19,7 +19,7 @@ public class Worker implements Runnable {
     private int startPartition;
     private int endPartition;
 
-    // Shared objects
+    // Shared crucial.examples.mandelbrot.objects
     @Shared(key = "centroids")
     private GlobalCentroids globalCentroids = new GlobalCentroids();
     @Shared(key = "delta")
@@ -50,9 +50,9 @@ public class Worker implements Runnable {
 
         int iterCount = 0;
         do {
-            System.out.println("Iteration " + iterCount + " of worker " + workerId);
+            System.out.println("Iteration " + iterCount + " of crucial.examples.mandelbrot.worker " + workerId);
 
-            // Get local copy of global objects
+            // Get local copy of global crucial.examples.mandelbrot.objects
             correctCentroids = globalCentroids.getCorrectCoordinates();
 
             // Reset data structures that will be used in this iteration
@@ -62,7 +62,7 @@ public class Worker implements Runnable {
             // Compute phase, returns number of local membership modifications
             delta = computeClusters();
 
-            // Update global objects
+            // Update global crucial.examples.mandelbrot.objects
             globalDelta.update(delta, localPartition.length);
 
             // Update global centroids

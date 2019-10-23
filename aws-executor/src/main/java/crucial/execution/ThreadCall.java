@@ -1,10 +1,7 @@
 package crucial.execution;
 
-import com.google.common.util.concurrent.Callables;
-
 import java.io.Serializable;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 
 /**
  * Packages the needed elements to send to a cloud thread. Such as the Runnable

@@ -52,7 +52,7 @@ mvn package shade:shade lambda:deploy-lambda -DskipTests -f pom.xml
 ### Run
 
 You have to copy `logistic-regression-1.0.jar` to the client node. 
-Since this example contains user-defined shared objects, you also have to copy this jar file to the `/tmp` directory of the Crucial DSO server node/s, so that it can be imported.
+Since this example contains user-defined shared crucial.examples.mandelbrot.objects, you also have to copy this jar file to the `/tmp` directory of the Crucial DSO server node/s, so that it can be imported.
 
 Start the Crucial DSO server with VPC support:
 
@@ -60,7 +60,7 @@ Start the Crucial DSO server with VPC support:
 ./server.sh -vpc
 ```
 
-Make sure that the Crucial DSO server is loading the jar file with the shared objects classes. The logs should show a line like this:
+Make sure that the Crucial DSO server is loading the jar file with the shared crucial.examples.mandelbrot.objects classes. The logs should show a line like this:
 
 ```
 [Server] Loading logistic-regression-1.0.jar

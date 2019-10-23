@@ -6,8 +6,8 @@ Each lambda function will compute one partition of the dataset.
 
 Apart from the version that uses serverless functions (`aws.objectsCr` package), this repository also contains two other versions of the example:
 
-* `threads.objects`: a fully local implementation with plain Java threads sharing memory.
-* `threads.objectsCr`: a local implementation with Java threads but with the shared objects decoupled in Crucial DSO. 
+* `threads.crucial.examples.mandelbrot.objects`: a fully local implementation with plain Java threads sharing memory.
+* `threads.objectsCr`: a local implementation with Java threads but with the shared crucial.examples.mandelbrot.objects decoupled in Crucial DSO. 
 
 ### Prerequisites
 
@@ -57,7 +57,7 @@ mvn package shade:shade lambda:deploy-lambda -DskipTests -f pom.xml
 ### Run
 
 You have to copy `kmeans-1.0.jar` to the client node. 
-Since this example contains user-defined shared objects, you also have to copy this jar file to the `/tmp` directory of the Crucial DSO server node/s, so that it can be imported.
+Since this example contains user-defined shared crucial.examples.mandelbrot.objects, you also have to copy this jar file to the `/tmp` directory of the Crucial DSO server node/s, so that it can be imported.
 
 Start the Crucial DSO server with VPC support:
 
@@ -65,7 +65,7 @@ Start the Crucial DSO server with VPC support:
 ./server.sh -vpc
 ```
 
-Make sure that the Crucial DSO server is loading the jar file with the shared objects classes. The logs should show a line like this:
+Make sure that the Crucial DSO server is loading the jar file with the shared crucial.examples.mandelbrot.objects classes. The logs should show a line like this:
 
 ```
 [Server] Loading kmeans-1.0.jar

@@ -5,9 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>crucial.examples</groupId>
-    <artifactId>santa-claus</artifactId>
+    <artifactId>mandelbrot</artifactId>
     <version>1.0</version>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -37,6 +36,7 @@
         <lambda.forceUpdate>true</lambda.forceUpdate>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>crucial</groupId>
@@ -49,6 +49,7 @@
             <artifactId>crucial-dso-client</artifactId>
             <version>9.0.3.Final</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -98,13 +99,14 @@
             <plugin>
                 <groupId>com.github.seanroy</groupId>
                 <artifactId>lambda-maven-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.3.3</version>
                 <configuration>
                     <region>${lambda.region}</region>
                     <functionCode>${lambda.functionCode}</functionCode>
                     <version>${lambda.version}</version>
                     <lambdaRoleArn>${lambda.roleArn}</lambdaRoleArn>
                     <s3Bucket>${lambda.s3Bucket}</s3Bucket>
+                    <keyPrefix>crucial-jars</keyPrefix>
                     <publish>${lambda.publish}</publish>
                     <forceUpdate>${lambda.forceUpdate}</forceUpdate>
                     <vpcSecurityGroupIds>
@@ -134,4 +136,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

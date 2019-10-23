@@ -102,7 +102,12 @@ public abstract class ServerlessExecutorService implements ExecutorService {
                 ThreadCall threadCall = new ThreadCall("ServerlessExecutor-"
                         + Thread.currentThread().getName());
                 threadCall.setTarget(task);
-                return invoke(threadCall);
+                try {
+                    return invoke(threadCall);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
             });
         });
         return localCallables;
@@ -180,7 +185,7 @@ public abstract class ServerlessExecutorService implements ExecutorService {
      * @param nWorkers      Number of workers among which split the iterations.
      * @param fromInclusive Start of the iteration index.
      * @param toExclusive   End of the iteration index.
-     * @param finalizer     Runnable to execute by each worker upon completion of
+     * @param finalizer     Runnable to execute by each crucial.examples.mandelbrot.worker upon completion of
      *                      all iterations.
      * @throws InterruptedException Error awaiting local threads.
      */
