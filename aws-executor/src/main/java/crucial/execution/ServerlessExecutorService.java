@@ -33,6 +33,7 @@ public abstract class ServerlessExecutorService implements ExecutorService {
     public void shutdown() {
         // Functions cannot be stopped. We do not accept more submissions.
         isShutdown = true;
+        executorService.shutdown();
     }
 
     public List<Runnable> shutdownNow() {

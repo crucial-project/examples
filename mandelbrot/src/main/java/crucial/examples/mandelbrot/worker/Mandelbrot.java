@@ -1,33 +1,15 @@
 package crucial.examples.mandelbrot.worker;
 
-import crucial.execution.IterativeRunnable;
-import crucial.examples.mandelbrot.objects.MandelbrotImage;
-import crucial.examples.mandelbrot.objects.MandelbrotInitData;
-import org.infinispan.crucial.Shared;
-
 import java.awt.*;
-import static crucial.examples.mandelbrot.MandelbrotController.cc; // Creates Crucial connection for Lambda functions
 
 /**
  * @author Gerard
  */
-public class Mandelbrot implements IterativeRunnable {
+public class Mandelbrot {
 
     private static final int BLACK = 0;
-    @Shared(key = "mandelbrotInitData")
-    private MandelbrotInitData initData = new MandelbrotInitData();
-    @Shared(key = "mandelbrotImage")
-    private MandelbrotImage image = new MandelbrotImage();
 
-    @Override
-    public void run(long index) {
-        int row = (int) index;
-        image.setRowColor(row, computeMandelbrot(row,
-                initData.getWidth(), initData.getHeight(),
-                initData.getMaxInternalIterations()));
-    }
-
-    private static int[] computeMandelbrot(int row, int width, int height, int maxIters) {
+    public static int[] computeMandelbrot(int row, int width, int height, int maxIters) {
         int[] rowColor = new int[width];
         int[] colors = new int[maxIters];
         for (int i = 0; i < maxIters; i++) {

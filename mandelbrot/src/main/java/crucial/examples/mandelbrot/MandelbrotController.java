@@ -1,9 +1,9 @@
 package crucial.examples.mandelbrot;
 
+import crucial.execution.IterativeRunnable;
 import crucial.execution.ServerlessExecutorService;
 import crucial.execution.aws.AWSLambdaExecutorService;
 import crucial.examples.mandelbrot.objects.MandelbrotImage;
-import crucial.examples.mandelbrot.objects.MandelbrotInitData;
 import org.infinispan.crucial.CrucialClient;
 import org.infinispan.crucial.Shared;
 import crucial.examples.mandelbrot.worker.Mandelbrot;
@@ -12,22 +12,19 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.io.Serializable;
 
 /**
  * @author Gerard
  */
-public class MandelbrotController {
+public class MandelbrotController implements Serializable {
     private static final int N_LAMBDAS = 10;
     private static final int ROWS = 1_000;
     private static final int COLUMNS = 1_000;
     private static final int MAX_INTERNAL_ITERATIONS = 100;
 
-//    static CrucialClient cc = CrucialClient.getClient("crucialIP:11222"); // CONFIGURE IP
+    //    static CrucialClient cc = CrucialClient.getClient("crucialIP:11222"); // CONFIGURE IP
     public static CrucialClient cc = CrucialClient.getClient("localhost:11222"); // CONFIGURE IP
-
-    @Shared(key = "mandelbrotInitData")
-    private MandelbrotInitData initData = new MandelbrotInitData();
 
     @Shared(key = "mandelbrotImage")
     private MandelbrotImage image = new MandelbrotImage();
@@ -37,14 +34,18 @@ public class MandelbrotController {
     }
 
     private void doMandelbrot() {
-        // Initialize shared crucial.examples.mandelbrot.objects
-        initData.init(COLUMNS, ROWS, MAX_INTERNAL_ITERATIONS);
+        // Initialize shared image object
         image.init(COLUMNS, ROWS);
 
         ServerlessExecutorService se = new AWSLambdaExecutorService();
         se.setLocal(true);
         try {
-            se.invokeIterativeTask(new Mandelbrot(), N_LAMBDAS, 0, ROWS);
+            se.invokeIterativeTask((IterativeRunnable) (index) -> {
+                int row = (int) index;
+                image.setRowColor(row, Mandelbrot.computeMandelbrot(row,
+                        COLUMNS, ROWS, MAX_INTERNAL_ITERATIONS));
+            }, N_LAMBDAS, 0, ROWS);
+            se.shutdown();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
