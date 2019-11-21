@@ -25,9 +25,9 @@ public class Mandelbrot implements Serializable {
 
     //    static CrucialClient cc = CrucialClient.getClient("crucialIP:11222"); // CONFIGURE IP
     public static CrucialClient cc = CrucialClient.getClient("localhost:11222"); // CONFIGURE IP
-
     @Shared(key = "mandelbrotImage")
     private MandelbrotImage image = new MandelbrotImage();
+
 
     public static void main(String[] args) {
         new Mandelbrot().doTest();

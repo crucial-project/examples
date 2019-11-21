@@ -7,7 +7,6 @@ import crucial.execution.ServerlessExecutorService;
 import java.util.Base64;
 
 public class AWSLambdaExecutorService extends ServerlessExecutorService {
-
     private AWSLambdaInvoker invoker = new AWSLambdaInvoker(Config.region, Config.functionName);
 
     @Override
@@ -20,7 +19,7 @@ public class AWSLambdaExecutorService extends ServerlessExecutorService {
             assert result != null;
             System.out.println(new String(Base64.getDecoder().decode(result.getLogResult())));
         }
-        return result.getPayload().array();
+        return Base64.getMimeDecoder().decode(result.getPayload().array());
     }
 
     public void closeInvoker() {

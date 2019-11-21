@@ -31,12 +31,6 @@
             <version>2.8.5</version>
         </dependency>
         <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>crucial-dso-client</artifactId>
-            <version>9.0.3.Final</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.14.3</version>
