@@ -19,7 +19,9 @@ You will need also to set up some extra configurations in AWS:
 * Assign an S3 endpoint to the route table of the VPC, to allow lambda functions to access S3.
 * Create an IAM role with at least the following policies: AWSLambdaFullAccess, AmazonS3FullAccess, CloudWatchLogsFullAccess, and AWSLambdaVPCAccessExecutionRole.
 
-To run this example you need one virtual machine for Crucial DSO server (e.g. `r5.2xlarge`) and another one for the client node. Both machines must be in the previously configured VPC and the same subnet.
+To run this example you need one virtual machine for Crucial DSO server (e.g. `r5.2xlarge`) and another one for the client node. Both machines must be in the previously configured VPC and the same subnet, and must have Java 8 Runtime installed.
+
+You will also need to configure the [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) in the client node in order to be able to invoke lambdas.
 
 ### Build  
 
