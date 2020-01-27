@@ -71,10 +71,10 @@ Make sure that the Crucial DSO server is loading the jar file with the shared ob
 [Server] Loading kmeans-1.0.jar
 ```
 
-Start the client:
+In the client node, start the client app:
 
 ```bash
-java -cp kmenas-1.0.jar crucial.examples.kmeans.aws.objectsCr.Main 100 25 10 80
+java -cp kmeans-1.0.jar crucial.examples.kmeans.aws.objectsCr.Main 100 25 10 80
 ```
 
 This command runs a k-means for 25 clusters using 80 lambdas for a maximum of 10 iterations. The dataset contains 100 values per point.
