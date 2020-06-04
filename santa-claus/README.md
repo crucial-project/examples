@@ -3,17 +3,18 @@
 The Santa Claus problem is a traditional exercise for concurrency.
 See the details [here](https://crsr.net/files/ANewExerciseInConcurrency.pdf).
 In this repository we solve the problem using
-[CRUCIAL](http://github.com/danielBCN/crucial-dso) and present different
+[Crucial](http://github.com/danielBCN/crucial-dso) and present different
 stages of the implementation.
 
 `threads` package contains implementations of the problem with plain
 Java threads.
 `crucial.examples.mandelbrot.objects` is fully local. Threads share memory.
-`objectsCr` is the same, but shared crucial.examples.mandelbrot.objects are decoupled in CRUCIAL.
+`objectsCr` is the same, but shared `crucial.examples.mandelbrot.objects` are
+decoupled in Crucial.
 
 `aws` package contains the same implementation with `objectsCr` but the
 threads now run in AWS Lambda by using the `CloudThread` abstraction in
-[aws-executor](../aws-executor).
+[crucial-executor](http://github.com/danielBCN/crucial-executor).
 
 ### Prerequisites
 
@@ -50,11 +51,11 @@ Before building the example, you have to apply some configurations:
   * `lambda.awsAccountId`
   * `lambda.roleName`: the previously created IAM role 
      (this is the role for the AWS Lambda functions)
-  * `lambda.functionName`: without suffix (e.g. `CloudThread`)
+  * `lambda.functionName`: without a suffix (e.g. `CloudThread`)
   * `lambda.timeout`
   * `lambda.memorySize`
-  * `lambda.functionNameSuffix`: e.g. `-daniel`.
-     The final name of the function then will be `CloudThread-daniel`.
+  * `lambda.functionNameSuffix`: e.g. `-example`.
+     The final name of the function then will be `CloudThread-example`.
   * `lambda.s3Bucket`: an S3 bucket used by the lambda-maven-plugin to
      temporary upload the function code before deploying to Lambda.
   * `lambda.region`:  The AWS region to use for the Lambda function.
@@ -105,10 +106,10 @@ java -cp santa-claus-1.0.jar crucial.examples.santa.aws.objectsCr.SantaClaus
 ```
 
 `SantaClaus` class is the main of each implementation.
-Crucial client is configured there (for server IP).
+The Crucial client is configured there (for the server IP).
 Problem dimensions are also there.
 
-#### Further notes
+#### Additional notes
 Commenting out VPC configuration will run the Lambda functions outside of it.
 Then, the DSO server should be accessible from outside.
 
@@ -116,4 +117,5 @@ For local testing (`threads` package), run the DSO server locally and connect
 through `localhost`.
 
 The AWS version can be tested locally with the local feature in
-[aws-executor](../aws-executor) (see line 56 at `aws.objectsCr.SantaClaus`).
+[crucial-executor](http://github.com/danielBCN/crucial-executor)
+(see line 56 at `aws.objectsCr.SantaClaus`).

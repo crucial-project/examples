@@ -7,7 +7,6 @@
     <groupId>crucial.examples</groupId>
     <artifactId>santa-claus</artifactId>
     <version>1.0</version>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -16,7 +15,7 @@
         <!--AWS CONFIG PROPERTIES-->
         <lambda.awsAccountId>000000000000</lambda.awsAccountId>
         <lambda.roleName>role-name</lambda.roleName>
-        <lambda.functionName>CloudTread</lambda.functionName>
+        <lambda.functionName>CloudThread</lambda.functionName>
         <lambda.timeout>60</lambda.timeout>
         <lambda.memorySize>1024</lambda.memorySize>
         <lambda.functionNameSuffix>-example</lambda.functionNameSuffix>
@@ -40,7 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>crucial</groupId>
-            <artifactId>aws-executor</artifactId>
+            <artifactId>crucial-executor</artifactId>
             <version>1.0</version>
         </dependency>
 

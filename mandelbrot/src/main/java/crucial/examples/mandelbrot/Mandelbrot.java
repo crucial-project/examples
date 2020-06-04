@@ -3,6 +3,7 @@ package crucial.examples.mandelbrot;
 import crucial.examples.mandelbrot.objects.MandelbrotImage;
 import crucial.execution.ServerlessExecutorService;
 import crucial.execution.aws.AWSLambdaExecutorService;
+import crucial.execution.aws.Config;
 import org.infinispan.crucial.CrucialClient;
 import org.infinispan.crucial.Shared;
 
@@ -28,6 +29,9 @@ public class Mandelbrot implements Serializable {
     @Shared(key = "mandelbrotImage")
     private MandelbrotImage image = new MandelbrotImage();
 
+//    static {
+//        Config.functionName = "FunctionName-sufix";  // Change based on pom.xml
+//    }
 
     public static void main(String[] args) {
         new Mandelbrot().doTest();
@@ -102,6 +106,6 @@ public class Mandelbrot implements Serializable {
 
         // Print report
         double tSecs = (double) (tEnd - tIni) / 1000;
-        System.out.println("Job done in " + tSecs + "s.\n");
+        System.out.println("Job done in " + tSecs + " s.\n");
     }
 }

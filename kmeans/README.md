@@ -1,45 +1,72 @@
 # k-means clustering
 
-This example uses Crucial DSO and AWS Lambda to compute a k-means clustering on some data stored in S3. The code assumes the dataset is a list of points as comma-separated-values (CSV) and is partitioned in several files (part-00000, part-00001, ...).
+This example uses Crucial DSO and AWS Lambda to compute a k-means clustering on
+some data stored in S3.
+The code assumes the dataset is a list of points as comma-separated-values (CSV)
+and is partitioned in several files (part-00000, part-00001, ...).
 
 Each lambda function will compute one partition of the dataset.
 
-Apart from the version that uses serverless functions (`aws.objectsCr` package), this repository also contains two other versions of the example:
+Apart from the version that uses serverless functions (`aws.objectsCr` package),
+this repository also contains two other versions of the example:
 
-* `threads.crucial.examples.mandelbrot.objects`: a fully local implementation with plain Java threads sharing memory.
-* `threads.objectsCr`: a local implementation with Java threads but with the shared crucial.examples.mandelbrot.objects decoupled in Crucial DSO. 
+* `threads.crucial.examples.mandelbrot.objects`: a fully local implementation
+  with plain Java threads sharing memory.
+* `threads.objectsCr`: a local implementation with Java threads but with the
+  shared crucial.examples.mandelbrot.objects decoupled in Crucial DSO. 
 
 ### Prerequisites
 
-To build this example you will need the Crucial DSO client installed to the local Maven repository. 
-Follow the instructions to [install and run Crucial DSO](https://github.com/danielBCN/crucial-dso#usage).
+To build this example you will need the Crucial DSO client installed to the
+local Maven repository. 
+Follow the instructions to
+[install and run Crucial DSO](https://github.com/danielBCN/crucial-dso#usage).
 
 You will need also to set up some extra configurations in AWS:
-* This example is configured to run in a Virtual Private Cloud (VPC). You need to create a VPC with several subnets (e.g. 10.0.128.0/24, 10.0.129.0/24, ...). For more information on configuring a Lambda function to access resources in a VPC, check out [AWS Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html).
-* Assign an S3 endpoint to the route table of the VPC, to allow lambda functions to access S3.
-* Create an IAM role with at least the following policies: AWSLambdaFullAccess, AmazonS3FullAccess, CloudWatchLogsFullAccess, and AWSLambdaVPCAccessExecutionRole.
+* This example is configured to run in a Virtual Private Cloud (VPC).
+  You need to create a VPC with several subnets
+  (e.g. 10.0.128.0/24, 10.0.129.0/24, ...).
+  For more information on configuring a Lambda function to access resources in a
+  VPC, check out [AWS Developer Guide](https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html).
+* Assign an S3 endpoint to the route table of the VPC, to allow lambda
+  functions to access S3.
+* Create an IAM role with at least the following policies: AWSLambdaFullAccess,
+  AmazonS3FullAccess, CloudWatchLogsFullAccess, and AWSLambdaVPCAccessExecutionRole.
 
-To run this example you need one virtual machine for Crucial DSO server (e.g. `r5.2xlarge`) and another one for the client node. Both machines must be in the previously configured VPC and the same subnet, and must have Java 8 Runtime installed.
+To run this example you need one virtual machine for Crucial DSO server
+(e.g. `r5.2xlarge`) and another one for the client node. Both machines must be
+in the previously configured VPC and the same subnet, and must have
+Java 8 Runtime installed.
 
-You will also need to configure the [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html) in the client node in order to be able to invoke lambdas.
+You will also need to configure the
+[AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+in the client node to be able to invoke lambdas.
 
 ### Build  
 
 Before building the example, you have to apply some configurations:
-* Edit `aws-executor/src/main/java/crucial/execution/aws/CloudThread.java` and configure the `region` and the `functionName`. This function name must include the suffix (see following point).
-* Edit `crucial.examples.kmeans.aws.objectsCr.Main` and configure the IP and port of the Crucial DSO server. You have also to specify the number of data points in each file partition (`DATAPOINTS_PER_FILE`).
-* Edit `crucial.examples.kmeans.aws.objectsCr.S3Reader` and specify the `S3_BUCKET` that contains the data and the `fileName` prefix of the dataset.
+* Edit `aws-executor/src/main/java/crucial/execution/aws/CloudThread.java`
+  and configure the `region` and the `functionName`.
+  This function name must include the suffix (see following point).
+* Edit `crucial.examples.kmeans.aws.objectsCr.Main` and configure the IP and port
+  of the Crucial DSO server. You have also to specify the number of data points
+  in each file partition (`DATAPOINTS_PER_FILE`).
+* Edit `crucial.examples.kmeans.aws.objectsCr.S3Reader` and specify the
+  `S3_BUCKET` that contains the data and the `fileName` prefix of the dataset.
 * Edit `kmeans/pom.xml` and configure the following fields:
   * `lambda.awsAccountId`
   * `lambda.roleName`: the previously created IAM role
-  * `lambda.functionName`: without suffix (e.g. `CloudThread`)
+  * `lambda.functionName`: without a suffix (e.g. `CloudThread`)
   * `lambda.timeout`
   * `lambda.memorySize`
-  * `lambda.functionNameSuffix`: e.g. `-daniel`. The final name of the function then will be `CloudThread-daniel`.
-  * `lambda.s3Bucket`: an S3 bucket used by the lambda-maven-plugin to temporary upload the function code before deploying to Lambda.
+  * `lambda.functionNameSuffix`: e.g. `-example`.
+    The final name of the function then will be `CloudThread-example`.
+  * `lambda.s3Bucket`: an S3 bucket used by the lambda-maven-plugin to temporary
+    upload the function code before deploying to Lambda.
   * `lambda.region`:  The AWS region to use for the Lambda function.
   * `lambda.vpcsecurityGroup`: The Group ID of the VPC security group.
-  * Under the configuration of the lambda-maven-plugin, you have to list the VPC subnets that will be assigned to lambda functions. E.g.:
+  * Under the configuration of the lambda-maven-plugin, you have to list the VPC
+    subnets that will be assigned to lambda functions. E.g.:
     
 ```
 <vpcSubnetIds>
@@ -59,7 +86,9 @@ mvn package shade:shade lambda:deploy-lambda -DskipTests -f pom.xml
 ### Run
 
 You have to copy `kmeans-1.0.jar` to the client node. 
-Since this example contains user-defined shared crucial.examples.mandelbrot.objects, you also have to copy this jar file to the `/tmp` directory of the Crucial DSO server node/s, so that it can be imported.
+Since this example contains user-defined shared `crucial.examples.mandelbrot.objects`,
+you also have to copy this jar file to the `/tmp` directory of the Crucial DSO
+server node/s, so that it can be imported.
 
 Start the Crucial DSO server with VPC support:
 
@@ -67,7 +96,9 @@ Start the Crucial DSO server with VPC support:
 ./server.sh -vpc
 ```
 
-Make sure that the Crucial DSO server is loading the jar file with the shared crucial.examples.mandelbrot.objects classes. The logs should show a line like this:
+Make sure the Crucial DSO server is loading the jar file with the shared
+`crucial.examples.mandelbrot.objects` classes.
+The logs should show a line like this:
 
 ```
 [Server] Loading kmeans-1.0.jar
@@ -79,4 +110,5 @@ In the client node, start the client app:
 java -cp kmeans-1.0.jar crucial.examples.kmeans.aws.objectsCr.Main 100 25 10 80
 ```
 
-This command runs a k-means for 25 clusters using 80 lambdas for a maximum of 10 iterations. The dataset contains 100 values per point.
+This command runs a k-means for 25 clusters using 80 lambdas for a maximum
+of 10 iterations. The dataset contains 100 values per point.
