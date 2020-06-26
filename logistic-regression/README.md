@@ -12,7 +12,7 @@ Each lambda function will compute one partition of the dataset.
 
 To build this example you will need the Crucial DSO client installed to the
 local Maven repository. 
-Follow the instructions to [install and run Crucial DSO](https://github.com/danielBCN/crucial-dso#usage).
+Follow the instructions to [install and run Crucial DSO](https://github.com/crucial-project/dso).
 
 You will need also to set up some extra configurations in AWS:
 * This example is configured to run in a Virtual Private Cloud (VPC).
@@ -38,9 +38,8 @@ in the client node in order to be able to invoke lambdas.
 ### Build  
 
 Before building the example, you have to apply some configurations:
-* Edit `aws-executor/src/main/java/crucial/execution/aws/CloudThread.java`
-  and configure the `region` and the `functionName`.
-  This function name must include the suffix (see following point).
+* Configure [Crucial executor](https://github.com/crucial-project/executor) at
+  logistic-regression/src/main/resources/config.properties.
 * Edit `crucial.examples.logisticregression.aws.objectsCr.Main` and configure
   the IP and port of the Crucial DSO server.
 * Edit `crucial.examples.logisticregression.aws.objectsCr.S3Reader` and specify
@@ -78,9 +77,9 @@ mvn package shade:shade lambda:deploy-lambda -DskipTests -f pom.xml
 ### Run
 
 You have to copy `logistic-regression-1.0.jar` to the client node. 
-Since this example contains user-defined shared
-`crucial.examples.mandelbrot.objects`, you also have to copy this jar file to
-the `/tmp` directory of the Crucial DSO server node/s, so that it can be imported.
+Since this example contains user-defined shared objects, you also have to copy
+this jar file to the `/tmp` directory of the Crucial DSO server node/s,
+so that it can be imported.
 
 Start the Crucial DSO server with VPC support:
 
@@ -89,8 +88,7 @@ Start the Crucial DSO server with VPC support:
 ```
 
 Make sure the Crucial DSO server is loading the jar file with the shared
-`crucial.examples.mandelbrot.objects` classes.
-The logs should show a line like this:
+objects classes. The logs should show a line like this:
 
 ```
 [Server] Loading logistic-regression-1.0.jar

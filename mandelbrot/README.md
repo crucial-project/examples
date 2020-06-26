@@ -1,19 +1,8 @@
-# k-means clustering
+# Mandelbrot set computation
 
-This example uses Crucial DSO and AWS Lambda to compute a k-means clustering on
-some data stored in S3.
-The code assumes the dataset is a list of points as comma-separated-values (CSV)
-and is partitioned in several files (part-00000, part-00001, ...).
-
-Each lambda function will compute one partition of the dataset.
-
-Apart from the version that uses serverless functions (`aws.objectsCr` package),
-this repository also contains two other versions of the example:
-
-* `threads.objects`: a fully local implementation
-  with plain Java threads sharing memory.
-* `threads.objectsCr`: a local implementation with Java threads but with the
-  shared objects decoupled in Crucial DSO. 
+This example uses Crucial DSO and AWS Lambda to compute the Mandelbrot set.
+It uses the parallel for abstraction of Curical's ServerlessExecutorService
+to distribute the computation across a cluster of Lambda functions.
 
 ### Prerequisites
 
@@ -46,13 +35,10 @@ in the client node to be able to invoke lambdas.
 
 Before building the example, you have to apply some configurations:
 * Configure [Crucial executor](https://github.com/crucial-project/executor) at
-  kmeans/src/main/resources/config.properties.
-* Edit `crucial.examples.kmeans.aws.objectsCr.Main` and configure the IP and port
-  of the Crucial DSO server. You have also to specify the number of data points
-  in each file partition (`DATAPOINTS_PER_FILE`).
-* Edit `crucial.examples.kmeans.aws.objectsCr.S3Reader` and specify the
-  `S3_BUCKET` that contains the data and the `fileName` prefix of the dataset.
-* Edit `kmeans/pom.xml` and configure the following fields:
+  mandelbrot/src/main/resources/config.properties.
+* Edit `crucial.examples.mandelbrot.Mandelbrot` and configure the IP and port
+  of the Crucial DSO server.
+* Edit `mandelbrot/pom.xml` and configure the following fields:
   * `lambda.awsAccountId`
   * `lambda.roleName`: the previously created IAM role
   * `lambda.functionName`: without a suffix (e.g. `CloudThread`)
@@ -84,7 +70,7 @@ mvn package shade:shade lambda:deploy-lambda -DskipTests -f pom.xml
 
 ### Run
 
-You have to copy `kmeans-1.0.jar` to the client node. 
+You have to copy `mandelbrot-1.0.jar` to the client node. 
 Since this example contains user-defined shared objects,
 you also have to copy this jar file to the `/tmp` directory of the Crucial DSO
 server node/s, so that it can be imported.
@@ -99,14 +85,11 @@ Make sure the Crucial DSO server is loading the jar file with the shared
 objects classes. The logs should show a line like this:
 
 ```
-[Server] Loading kmeans-1.0.jar
+[Server] Loading mandelbrot-1.0.jar
 ```
 
 In the client node, start the client app:
 
 ```bash
-java -cp kmeans-1.0.jar crucial.examples.kmeans.aws.objectsCr.Main 100 25 10 80
+java -cp mandelbrot-1.0.jar crucial.examples.mandelbrot.Mandelbrot
 ```
-
-This command runs a k-means for 25 clusters using 80 lambdas for a maximum
-of 10 iterations. The dataset contains 100 values per point.
