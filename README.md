@@ -18,6 +18,7 @@ running.
 
 Examples:
 
+- [simple](./simple)
 - [_k_-means](./kmeans)
 - [logistic regression](./logistic-regression)
 - [Santa Claus problem](./santa-claus)

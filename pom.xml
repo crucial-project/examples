@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.crucial</groupId>
+    <artifactId>examples</artifactId>
+    <version>1.0</version>
+    <name>crucial-examples</name>
+    <packaging>pom</packaging>
+    <description>Examples using the CRUCIAL framework.</description>
+
+    <properties>
+        <maven.compiler.source-target>11</maven.compiler.source-target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <developers>
+        <developer>
+            <name>Pierre Sutra</name>
+            <organization>Télécom SudParis</organization>
+            <organizationUrl>https://github.com/otrack</organizationUrl>
+        </developer>
+        <developer>
+            <name>Daniel Barcelona-Pons</name>
+            <organization>Universitat Rovira I Virgili</organization>
+            <organizationUrl>https://www.urv.cat/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Gerard París Aixalà</name>
+            <organization>Universitat Rovira I Virgili</organization>
+            <organizationUrl>https://www.urv.cat/</organizationUrl>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>simple</module>
+    </modules>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dso-client</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>executor</artifactId>
+            <version>2.0</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>${maven.compiler.source-target}</source>
+                    <target>${maven.compiler.source-target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
