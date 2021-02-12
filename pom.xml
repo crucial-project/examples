@@ -19,8 +19,8 @@
     <developers>
         <developer>
             <name>Pierre Sutra</name>
-            <organization>Télécom SudParis</organization>
-            <organizationUrl>https://github.com/otrack</organizationUrl>
+	    <organization>Institut Polytechnique de Paris</organization>
+            <organizationUrl>https://www.ip-paris.fr/</organizationUrl>
         </developer>
         <developer>
             <name>Daniel Barcelona-Pons</name>
@@ -31,6 +31,11 @@
             <name>Gerard París Aixalà</name>
             <organization>Universitat Rovira I Virgili</organization>
             <organizationUrl>https://www.urv.cat/</organizationUrl>
+        </developer>
+	<developer>
+            <name>Antoine Colin</name>
+            <organization>Institut Polytechnique de Paris</organization>
+	    <organizationUrl>https://www.ip-paris.fr/</organizationUrl>
         </developer>
     </developers>
 
