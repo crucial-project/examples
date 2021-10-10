@@ -42,6 +42,7 @@ then
     mkdir -p ${CODE_DIR}/lib
     cp -Rf ${TARGET_DIR}/lib ${CODE_DIR}
     cp -Rf ${TARGET_DIR}/classes/* ${CODE_DIR}/
+    cp -Rf ${TARGET_DIR}/test-classes/* ${CODE_DIR}/
     cd ${TMP_DIR}/code && zip -r code.zip * && mv code.zip .. && cd ${PROJ_DIR} # FIXME
     aws lambda create-function \
 	    --region=${AWS_REGION} \

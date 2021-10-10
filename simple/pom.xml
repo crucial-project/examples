@@ -14,9 +14,12 @@
     <description>Base examples using CRUCIAL.</description>
 
     <properties>
+        <maven.compiler.source>1.11</maven.compiler.source>
+        <maven.compiler.target>1.11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.testng>6.14.3</version.testng>
     </properties>
-    
+
     <dependencies>
 
         <dependency>
@@ -29,6 +32,14 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>executor</artifactId>
             <version>2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>executor</artifactId>
+            <version>2.0</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
