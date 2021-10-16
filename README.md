@@ -18,8 +18,13 @@ running.
 
 Examples:
 
-- [simple](./simple)
+- [base examples (wordcount, monte carlo, etc.)](./simple)
 - [_k_-means](./kmeans)
 - [logistic regression](./logistic-regression)
 - [Santa Claus problem](./santa-claus)
-- [Mandelbrot](./mandelbrot)
+- [Mandelbrot set approximation](./mandelbrot)
+
+
+Monte carlo demo:
+
+[![asciicast](https://asciinema.org/a/R7vsaKOjSxCkl2lC5gExCXqRz.svg)](https://asciinema.org/a/R7vsaKOjSxCkl2lC5gExCXqRz)
