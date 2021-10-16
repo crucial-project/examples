@@ -1,30 +1,15 @@
-# CRUCIAL Examples
+# Crucial Examples
 
-This repository contains different examples using the
-[CRUCIAL](https://github.com/crucial-project/crucial) system.
-
-All these example projects depend on the
-[crucial-executor](https://github.com/crucial-project/executor).
-It contains the abstraction of `CloudThread` and allows running threads at
-AWS Lambda transparently.
-It also includes a `ServerlessExecutorService` to easily manage the execution
-of concurrent tasks.
-This executor service offers the same API as the Java one, but it adds the
-`invokeIterativeTask` functionality to easily parallelize **for** structures
-(see Mandelbrot example).
-
-The examples also need the [DSO datastore](https://github.com/crucial-project/dso)
-running.
-
-Examples:
-
-- [base examples (wordcount, monte carlo, etc.)](./simple)
+This repository contains the following examples using
+[Crucial](https://github.com/crucial-project/crucial):
+- [base usage (wordcount, monte carlo, etc.)](./simple)
 - [_k_-means](./kmeans)
 - [logistic regression](./logistic-regression)
 - [Santa Claus problem](./santa-claus)
 - [Mandelbrot set approximation](./mandelbrot)
 
+Some of these examples may require a DSO server to access shared data and synchronize cloud threads.
 
-Monte carlo demo:
+## Monte carlo demo:
 
 [![asciicast](https://asciinema.org/a/R7vsaKOjSxCkl2lC5gExCXqRz.svg)](https://asciinema.org/a/R7vsaKOjSxCkl2lC5gExCXqRz)
