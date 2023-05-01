@@ -17,7 +17,7 @@
         <maven.compiler.source>1.11</maven.compiler.source>
         <maven.compiler.target>1.11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.testng>6.14.3</version.testng>
+        <version.testng>7.7.0</version.testng>
     </properties>
 
     <dependencies>
